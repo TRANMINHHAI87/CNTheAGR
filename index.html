@@ -310,7 +310,7 @@
       <img id="logoHead" alt="Agribank">
       <div class="branch">CHI NHÁNH BẮC GIANG II</div>
     </div>
-    <div class="prog-title">CHƯƠNG TRÌNH TRA CỨU DỊCH VỤ THẺ HIỆN CÓ CỦA AGRIBANK</div>
+    <div class="prog-title">CHƯƠNG TRÌNH TRA CỨU CÁC SẢN PHẨM THẺ HIỆN CÓ CỦA AGRIBANK</div>
     <div class="author">Tác giả: <b>Trần Minh Hải</b> – 0938150987</div>
     <div id="searchWrap">
       <span class="sr-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
@@ -622,7 +622,7 @@ const SPECIAL=[{id:'compare',name:'So sánh thẻ',icon:'compare'},{id:'calc',na
 function renderTabs(){
   const nav=document.getElementById('tabs');
   let h='';
-  DB.forEach(b=>{h+=`<button class="tab ${cur.tab===b.id?'on':''}" onclick="selTab('${b.id}')">${b.name}</button>`;});
+  DB.forEach(b=>{const lg=b.logo==='napas'?`<span class="tnapas">NAPAS</span><span>${b.name.replace(' \u00b7 NAPAS','')}</span>`:`<img class="tlogo" src="${LOGOS[b.logo]}" alt="${b.name}"><span>${b.name}</span>`;h+=`<button class="tab ${cur.tab===b.id?'on':''}" onclick="selTab('${b.id}')">${lg}</button>`;});
   SPECIAL.forEach(s=>{h+=`<button class="tab tab-sp ${cur.tab===s.id?'on':''}" onclick="selTab('${s.id}')">${svg(s.icon)}${s.name}</button>`;});
   nav.innerHTML=h;
 }
@@ -929,7 +929,7 @@ async function readPdf(ev){
   ev.target.value='';
 }
 /* ---------- KHỞI TẠO ---------- */
-(function(){const lh=document.getElementById('logoHead');if(lh&&window.LOGOS)lh.src=LOGOS.agribank;})();
+(function(){const lh=document.getElementById('logoHead');if(lh&&typeof LOGOS!=='undefined')lh.src=LOGOS.agribank;})();
 renderTabs(); renderView();
 document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg')closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();const b=document.getElementById('searchResults');if(b)b.style.display='none';}});

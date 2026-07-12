@@ -310,7 +310,7 @@
       <img id="logoHead" alt="Agribank">
       <div class="branch">CHI NHÁNH BẮC GIANG II</div>
     </div>
-    <div class="prog-title">CHƯƠNG TRÌNH TRA CỨU CÁC SẢN PHẨM THẺ HIỆN CÓ CỦA AGRIBANK</div>
+    <div class="prog-title">CHƯƠNG TRÌNH TRA CỨU CÁC SẢN PHẨM THẺ CỦA AGRIBANK</div>
     <div class="author">Tác giả: <b>Trần Minh Hải</b> – 0938150987</div>
     <div id="searchWrap">
       <span class="sr-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
@@ -471,10 +471,10 @@ const LIM_DOM_CREDIT=[
   ['Sinh viên các trường ĐH, CĐ, trung cấp','≤ 10 triệu']];
 function prinIntl(day){return[
   ['Ngày sao kê',day],['Đến hạn thanh toán','Sau 15 ngày kể từ ngày sao kê'],
-  ['Tỷ lệ thanh toán tối thiểu','5% dư nợ cuối kỳ'],['Miễn lãi','Tối đa ~45 ngày khi trả đủ dư nợ đến hạn']];}
+  ['Tỷ lệ thanh toán tối thiểu','5% dư nợ cuối kỳ (không thấp hơn 200.000đ)'],['Miễn lãi','Tối đa ~45 ngày khi trả đủ dư nợ đến hạn']];}
 const PRIN_DOM=[
   ['Ngày sao kê','Ngày 10 hàng tháng'],['Đến hạn thanh toán','Sau 25 ngày kể từ sao kê'],
-  ['Tỷ lệ thanh toán tối thiểu','2% dư nợ cuối kỳ'],['Miễn lãi','Tối đa ~55 ngày khi trả đủ dư nợ đến hạn']];
+  ['Tỷ lệ thanh toán tối thiểu','2% dư nợ cuối kỳ (không thấp hơn 200.000đ)'],['Miễn lãi','Tối đa ~55 ngày khi trả đủ dư nợ đến hạn']];
 
 /* ============================================================
    BIỂU PHÍ — SỐ TIỀN THẬT (QĐ 2929/2024, sửa đổi 3446/2025)
@@ -605,10 +605,10 @@ const DB=[
  ]},
 ];
 const BADGE_TXT={debit:'Ghi nợ',credit:'Tín dụng',virtual:'Phi vật lý',prepaid:'Trả trước'};
-const GRACE={'td-lv':{S:10,g:25,max:55,min:2,name:'Tín dụng nội địa Lộc Việt'},
-  'td-visa':{S:10,g:15,max:45,min:5,name:'Tín dụng Visa'},
-  'td-mc':{S:20,g:15,max:45,min:5,name:'Tín dụng Mastercard'},
-  'td-jcb':{S:20,g:15,max:45,min:5,name:'Tín dụng JCB'}};
+const GRACE={'td-lv':{S:10,g:25,max:55,min:2,min0:200000,name:'Tín dụng nội địa Lộc Việt'},
+  'td-visa':{S:10,g:15,max:45,min:5,min0:200000,name:'Tín dụng Visa'},
+  'td-mc':{S:20,g:15,max:45,min:5,min0:200000,name:'Tín dụng Mastercard'},
+  'td-jcb':{S:20,g:15,max:45,min:5,min0:200000,name:'Tín dụng JCB'}};
 function allCards(){const a=[];DB.forEach(b=>b.cards.forEach(c=>a.push({b,c})));return a;}
 function findCard(cid){for(const b of DB){const c=b.cards.find(x=>x.id===cid);if(c)return{b,c};}return null;}
 function rv(v,t){return typeof v==='function'?v(t):v;}
@@ -745,12 +745,13 @@ function calcResults(key,items){
   items.forEach(it=>{const d=new Date(it.date+'T00:00:00');const st=_stmt(d,gp.S);const k=st.getTime();
     (groups[k]=groups[k]||{st,items:[]}).items.push({d,amount:it.amount});});
   return Object.keys(groups).map(Number).sort((a,b)=>a-b).map(k=>{
-    const g=groups[k], due=_addDays(g.st,gp.g), tot=g.items.reduce((s,x)=>s+(Number(x.amount)||0),0), minPay=Math.round(tot*gp.min/100);
+    const g=groups[k], due=_addDays(g.st,gp.g), tot=g.items.reduce((s,x)=>s+(Number(x.amount)||0),0);
+    const _minPct=Math.round(tot*gp.min/100), _floor=gp.min0||0, minPay=tot>0?Math.min(tot,Math.max(_minPct,_floor)):0, _useFloor=minPay===_floor&&_floor>_minPct;
     const lines=g.items.sort((a,b)=>a.d-b.d).map(x=>`<div class="calc-line"><span>${_fmt(x.d)}${x.amount?' · '+_money(x.amount):''}</span><span class="cl-days">miễn lãi ${_days(x.d,due)} ngày</span></div>`).join('');
     return `<div class="calc-cycle">
       <div class="cc-head"><b>Kỳ sao kê ${_fmt(g.st)}</b>${tot?'<span>Tổng chi tiêu: '+_money(tot)+'</span>':''}</div>
       <div class="cc-due">Ngày sao kê <b>${_fmt(g.st)}</b> &nbsp;➜&nbsp; Đến hạn thanh toán <b>${_fmt(due)}</b> (${_WD[due.getDay()]})</div>
-      <div class="cc-two"><span>Trả đủ để <b>miễn lãi</b>: ${tot?_money(tot):'toàn bộ dư nợ'}</span><span>Trả tối thiểu ${gp.min}%: <b>${tot?_money(minPay):'—'}</b>${tot?' — phần còn lại bị tính lãi':''}</span></div>
+      <div class="cc-two"><span>Trả đủ để <b>miễn lãi</b>: ${tot?_money(tot):'toàn bộ dư nợ'}</span><span>Trả tối thiểu: <b>${tot?_money(minPay):'—'}</b>${_useFloor?' (theo mức sàn '+_money(_floor)+')':''}${tot?' — phần còn lại bị tính lãi':''}</span></div>
       ${lines}</div>`;}).join('');
 }
 function calcBody(key,state,ns){
@@ -758,7 +759,7 @@ function calcBody(key,state,ns){
   const rows=state.items.map((it,i)=>{const d=new Date(it.date+'T00:00:00');
     return `<div class="calc-item"><span>${_WD[d.getDay()]}, ${_fmt(d)}${it.amount?' · '+_money(it.amount):''}</span>
       <button class="btn btn-del btn-sm" onclick="delCalc('${ns}',${i})">Xoá</button></div>`;}).join('');
-  return `<div class="calc-params">Chốt sao kê: <b>ngày ${gp.S} hằng tháng</b> &nbsp;·&nbsp; Hạn thanh toán: <b>${gp.g} ngày</b> sau sao kê &nbsp;·&nbsp; Miễn lãi tối đa <b>${gp.max} ngày</b> &nbsp;·&nbsp; Trả tối thiểu <b>${gp.min}%</b></div>
+  return `<div class="calc-params">Chốt sao kê: <b>ngày ${gp.S} hằng tháng</b> &nbsp;·&nbsp; Hạn thanh toán: <b>${gp.g} ngày</b> sau sao kê &nbsp;·&nbsp; Miễn lãi tối đa <b>${gp.max} ngày</b> &nbsp;·&nbsp; Trả tối thiểu <b>${gp.min}% dư nợ, không thấp hơn ${_money(gp.min0)}</b></div>
     <div class="calc-add">
       <input type="date" id="cd_${ns}">
       <input type="number" id="ca_${ns}" placeholder="Số tiền (tuỳ chọn)" min="0">

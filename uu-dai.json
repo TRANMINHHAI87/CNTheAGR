@@ -1,0 +1,20 @@
+{
+  "_huong_dan": "File nay chua cac chuong trinh uu dai CHUNG - ai vao web cung thay. Dat file nay CUNG THU MUC voi file HTML tren GitHub. Ma the: gn-nd | gn-lv | td-lv | dcard | prepaid | gn-visa | td-visa | gn-mc | vcard | td-mc | gn-jcb | jcard | td-jcb. Truong link la tuy chon (duong dan toi file PDF trong repo).",
+  "td-mc": [
+    {
+      "title": "Ưu đãi Mastercard World – phòng chờ sân bay",
+      "body": "Miễn phí 4 lượt/năm tại hơn 1.200 phòng chờ toàn cầu (Mastercard Travel Pass). Áp dụng cho chủ thẻ hạng Kim Cương.",
+      "start": "2026-01-01",
+      "end": "2026-12-31",
+      "link": "uu-dai/mcworld.pdf"
+    }
+  ],
+  "gn-nd": [
+    {
+      "title": "Miễn phí phát hành thẻ Success",
+      "body": "Áp dụng cho khách hàng mở thẻ tại Agribank CN Bắc Giang II.",
+      "start": "2026-07-01",
+      "end": "2026-09-30"
+    }
+  ]
+}

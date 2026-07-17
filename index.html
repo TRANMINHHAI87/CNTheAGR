@@ -15,7 +15,7 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--cream);color:var(--text);
     font-family:'Myriad Pro','Segoe UI','Helvetica Neue',Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+  .wrap{max-width:1400px;margin:0 auto;padding:0 18px}
 
   /* ---------- HEADER ---------- */
   header{background:linear-gradient(180deg,#fff 0%, #fbf8f4 100%);border-bottom:1px solid var(--line)}
@@ -869,7 +869,29 @@ function gotoCard(bid,cid){
 const STORE_KEY='agribank_the_offers_v1';
 function loadAll(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return{};}}
 function saveAll(o){try{localStorage.setItem(STORE_KEY,JSON.stringify(o));}catch(e){alert('Không lưu được (bộ nhớ trình duyệt bị chặn hoặc đầy).');}}
-function getOffers(cid){return loadAll()[cid]||[];}
+let SHARED={};
+async function loadShared(){
+  if(!/^https?:$/.test(location.protocol))return;   // mở trực tiếp bằng file:// thì bỏ qua (tránh lỗi CORS)
+  try{const r=await fetch('uu-dai.json?v='+Date.now());if(!r.ok)return;const d=await r.json();
+    if(d&&typeof d==='object'&&!Array.isArray(d)){SHARED=d;if(document.getElementById('offers'))renderOffers();}
+  }catch(e){/* mở bằng file:// hoặc chưa có file uu-dai.json — bỏ qua */}
+}
+function getOffers(cid){
+  const sh=(Array.isArray(SHARED[cid])?SHARED[cid]:[]).map((o,i)=>Object.assign({},o,{_s:true,id:o.id||('s'+cid+i)}));
+  return sh.concat(loadAll()[cid]||[]);
+}
+function exportOffers(){
+  const local=loadAll(), out={};
+  new Set([...Object.keys(SHARED),...Object.keys(local)]).forEach(k=>{
+    const sh=(Array.isArray(SHARED[k])?SHARED[k]:[]).map(o=>{const c=Object.assign({},o);delete c._s;return c;});
+    const li=sh.concat(local[k]||[]); if(li.length)out[k]=li;
+  });
+  if(!Object.keys(out).length){alert('Chưa có chương trình ưu đãi nào để xuất.');return;}
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='uu-dai.json';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  alert('Đã tải về file uu-dai.json.\n\nĐưa file này vào GitHub, để CÙNG THƯ MỤC với file HTML (ghi đè file cũ) → mọi người vào web đều thấy các ưu đãi này.');
+}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function fmtD(s){if(!s)return'—';const p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
 function offStatus(o){
@@ -885,17 +907,18 @@ function renderOffers(){
   const cid=cur.card, list=getOffers(cid), c=findCard(cid).c;
   const expired=list.filter(o=>offStatus(o).card==='expired');
   let html=`<div class="panel"><div class="p-h">${svg('gift')}<h4>Quản lý chương trình ưu đãi</h4></div>
-    <div class="offbar"><div class="muted" style="font-size:13px">Ưu đãi bạn tự thêm cho <b style="color:var(--burg)">${c.name}</b> — lưu ngay trên thiết bị này.</div>
-      <button class="btn btn-primary" onclick="openModal()">＋ Thêm chương trình ưu đãi</button></div>`;
+    <div class="offbar"><div class="muted" style="font-size:13px">Ưu đãi của <b style="color:var(--burg)">${c.name}</b> — gồm ưu đãi <b>CHUNG</b> (từ file uu-dai.json, ai cũng thấy) và ưu đãi bạn tự thêm trên máy này.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="openModal()">＋ Thêm chương trình ưu đãi</button><button class="btn" onclick="exportOffers()">⭳ Xuất file uu-dai.json</button></div></div>`;
   if(expired.length)html+=`<div class="warnbanner">⚠ Có ${expired.length} chương trình đã hết hạn — nên xoá để danh sách gọn gàng.</div>`;
   if(!list.length)html+=`<div class="emptybox" style="margin-top:14px">Chưa có chương trình ưu đãi nào.<br>Nhấn “Thêm chương trình ưu đãi” để <b>nhập tay</b> hoặc <b>tải từ file PDF</b>.</div>`;
   else{const sorted=[...list].sort((a,b)=>(offStatus(a).card==='expired'?1:0)-(offStatus(b).card==='expired'?1:0));
     html+=`<div class="offlist">`+sorted.map(o=>{const st=offStatus(o);
-      return `<div class="offcard ${st.card}"><div class="off-h"><span class="ot">${esc(o.title)}</span><span class="status ${st.cls}">${st.txt}</span></div>
+      return `<div class="offcard ${st.card}"><div class="off-h"><span class="ot">${esc(o.title)}${o._s?'<span style="font-size:10.5px;font-weight:800;color:#1F5C46;background:#e9f3ee;border-radius:5px;padding:2px 6px;margin-left:7px;letter-spacing:.3px">CHUNG</span>':''}</span><span class="status ${st.cls}">${st.txt}</span></div>
         <div class="off-dates"><span>Bắt đầu: <b>${fmtD(o.start)}</b></span><span>Kết thúc: <b>${fmtD(o.end)}</b></span></div>
         <div class="off-body">${esc(o.body)}</div>
-        <div class="off-foot"><button class="btn btn-del btn-sm" onclick="delOffer('${o.id}')">🗑 Xoá</button></div></div>`;}).join('')+`</div>`;}
-  html+=`<div class="savehint">💾 <b>Cách lưu dữ liệu:</b> ưu đãi được lưu bằng bộ nhớ trình duyệt (localStorage) ngay trên máy/điện thoại này — <b>không mất khi tắt và mở lại</b> trang, kể cả khi đăng trên GitHub Pages. Dữ liệu chỉ nằm trên thiết bị/trình duyệt đang dùng.</div></div>`;
+        ${o.link?`<div style="margin-top:9px"><a href="${esc(o.link)}" target="_blank" rel="noopener" style="color:var(--burg);font-weight:700;font-size:13px">📎 Xem chi tiết / tải file đính kèm</a></div>`:''}
+        <div class="off-foot">${o._s?'<span class="muted" style="font-size:12px">Ưu đãi chung — sửa trong file uu-dai.json trên GitHub</span>':`<button class="btn btn-del btn-sm" onclick="delOffer('${o.id}')">🗑 Xoá</button>`}</div></div>`;}).join('')+`</div>`;}
+  html+=`<div class="savehint">💾 <b>Hai nơi lưu ưu đãi:</b><br>• <b>Ưu đãi CHUNG — mọi người đều thấy:</b> nằm trong file <b>uu-dai.json</b> đặt cùng thư mục với file HTML trên GitHub. Muốn thêm: nhập ưu đãi ở đây → bấm <b>“Xuất file uu-dai.json”</b> → tải file đó lên GitHub (ghi đè file cũ).<br>• <b>Ưu đãi tự thêm ở máy này:</b> chỉ lưu trong trình duyệt của bạn (localStorage), không mất khi tắt/mở lại trang, nhưng <b>người khác không thấy</b>.</div></div>`;
   panel.innerHTML=html;
 }
 function delOffer(id){if(!confirm('Xoá chương trình ưu đãi này?'))return;
@@ -931,7 +954,7 @@ async function readPdf(ev){
 }
 /* ---------- KHỞI TẠO ---------- */
 (function(){const lh=document.getElementById('logoHead');if(lh&&typeof LOGOS!=='undefined')lh.src=LOGOS.agribank;})();
-renderTabs(); renderView();
+renderTabs(); renderView(); loadShared();
 document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg')closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();const b=document.getElementById('searchResults');if(b)b.style.display='none';}});
 document.addEventListener('click',e=>{const s=document.getElementById('searchWrap');if(s&&!s.contains(e.target)){const b=document.getElementById('searchResults');if(b)b.style.display='none';}});

@@ -7,6 +7,65 @@
       "start": "2026-01-01",
       "end": "2026-12-31",
       "link": "uu-dai/mcworld.pdf"
+    },
+    {
+      "title": "Ưu đãi Mastercard World – Giảm 50% Green Fee và lớp học Golf",
+      "body": "Giảm giá 50% Green Fee và lớp học Golf với giới hạn tối đa 4 lần/năm. Áp dụng tại các sân Golf ở Việt Nam (như Chi Linh Star, The Montgomerie, Danang Golf Club, Sea Links, Long Thanh, Song Be, Vietnam Golf & Country Club), Singapore và Thái Lan. Khách hàng cần đặt trước ít nhất 5 ngày tại website https://mastercardseagolf.apexlynx.net/.",
+      "start": "2024-01-16",
+      "end": "2027-01-15"
+    }
+  ],
+  "gn-nd": [
+    {
+      "title": "Miễn phí phát hành thẻ Success",
+      "body": "Áp dụng cho khách hàng mở thẻ tại Agribank CN Bắc Giang II.",
+      "start": "2026-07-01",
+      "end": "2026-09-30"
+    }
+  ],
+  "td-jcb": [
+    {
+      "title": "Ưu đãi Agribank JCB – Giảm giá tại Shopee và AEON",
+      "body": "Tại Shopee: Giảm 50.000 VND cho đơn từ 300.000 VND vào ngày thường (tối đa 4 lần/tháng) và giảm 200.000 VND cho đơn từ 1.000.000 VND vào các ngày đặc biệt (08/8, 09/9, 10/10, 11/11, tối đa 1 lần/tháng). Tại AEON: Tặng phiếu mua sắm trị giá 200.000 VND khi thanh toán trực tiếp từ 1.000.000 VND (tối đa 1 lần/ngày và 2 lần/tháng).",
+      "start": "2026-07-15",
+      "end": "2026-11-30"
+    },
+    {
+      "title": "Ưu đãi Agribank JCB – Giảm giá ShopeeFood",
+      "body": "Giảm 60.000 VND khi thanh toán đơn hàng có giá trị từ 120.000 VND trở lên trên ứng dụng hoặc website ShopeeFood. Ưu đãi áp dụng tối đa 02 lần/tháng cho mỗi tài khoản.",
+      "start": "2026-07-15",
+      "end": "2026-11-30"
+    },
+    {
+      "title": "Ưu đãi Agribank JCB Ultimate – Tiêu 3 hoàn 1",
+      "body": "Hoàn tiền 1.000.000 VND cho chủ thẻ phát hành lần đầu khi có phát sinh giao dịch thanh toán từ 3.000.000 VND trở lên trong vòng 60 ngày kể từ ngày phát hành thẻ thành công.",
+      "start": "2026-07-15",
+      "end": "2026-11-30"
+    },
+    {
+      "title": "Ưu đãi Agribank JCB – Hoàn tiền chi tiêu toàn cầu",
+      "body": "Hoàn 10% tổng giá trị thanh toán trong tháng (tối thiểu 50.000 VND và tối đa 500.000 VND) đối với các giao dịch thanh toán hàng hóa, dịch vụ hợp lệ tại các Đơn vị chấp nhận thanh toán nước ngoài.",
+      "start": "2026-07-15",
+      "end": "2026-11-30"
+    }
+  ],
+  "td-lv": [
+    {
+      "title": "Chương trình Thẻ Lộc Việt – Chi tiêu mỗi ngày, tích lũy dài lâu",
+      "body": "Hoàn tiền lên đến 8% khi thanh toán hàng hóa, dịch vụ bằng thẻ tín dụng Lộc Việt. Cụ thể: Hoàn 8% (tối đa 400.000 VND/tháng) cho các giao dịch tại Siêu thị, cửa hàng tiện lợi, điện máy, ăn uống, nhà hàng, y tế, giáo dục. Hoàn 5% (tối đa 200.000 VND/tháng) cho các giao dịch khách sạn, du lịch, làm đẹp, spa và toàn bộ các giao dịch Internet khác. Yêu cầu số tiền hoàn tối thiểu đạt 5.000 VND/tháng.",
+      "start": "2026-02-10",
+      "end": "2026-11-30"
+    }
+  ]
+}{
+  "_huong_dan": "File nay chua cac chuong trinh uu dai CHUNG - ai vao web cung thay. Dat file nay CUNG THU MUC voi file HTML tren GitHub. Ma the: gn-nd | gn-lv | td-lv | dcard | prepaid | gn-visa | td-visa | gn-mc | vcard | td-mc | gn-jcb | jcard | td-jcb. Truong link la tuy chon (duong dan toi file PDF trong repo).",
+  "td-mc": [
+    {
+      "title": "Ưu đãi Mastercard World – phòng chờ sân bay",
+      "body": "Miễn phí 4 lượt/năm tại hơn 1.200 phòng chờ toàn cầu (Mastercard Travel Pass). Áp dụng cho chủ thẻ hạng Kim Cương.",
+      "start": "2026-01-01",
+      "end": "2026-12-31",
+      "link": "uu-dai/mcworld.pdf"
     }
   ],
   "gn-nd": [

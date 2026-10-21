@@ -169,7 +169,7 @@
   footer{border-top:1px solid var(--line);padding:20px 0;background:#fff;color:var(--muted);font-size:12.5px;text-align:center}
   footer b{color:var(--green)}
   .savehint{background:var(--ok-bg);border:1px solid #bfe3cd;color:var(--ok);border-radius:10px;padding:10px 14px;
-    font-size:12.7px;margin-top:16px;display:flex;align-items:flex-start;gap:9px}
+    font-size:12.7px;margin-top:16px;display:block;line-height:1.65}
 
   .calc-params{background:var(--soft);border-radius:9px;padding:9px 12px;font-size:12.8px;color:var(--muted);margin-bottom:12px}
   .calc-add{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
@@ -326,8 +326,8 @@
 
 <footer>
   <div class="wrap">
-    Dữ liệu theo Quy định <b>2239/QyĐ-NHNo-TTT</b> (31/7/2024), văn bản sửa đổi <b>2946/QyĐ-NHNo-TTT</b> và
-    Công văn <b>9452/NHNo-TTT</b> về thẻ Agribank Mastercard World. Biểu phí, lãi suất theo Biểu phí dịch vụ hiện hành.<br>
+    Dữ liệu theo Quy định <b>2239/QyĐ-NHNo-TTT</b> (31/7/2024) và các văn bản sửa đổi, mới nhất <b>3069/QyĐ-NHNo-TTT</b> (16/10/2026, hiệu lực 26/10/2026);
+    Công văn <b>9452/NHNo-TTT</b> về thẻ Agribank Mastercard World. Biểu phí theo QĐ <b>2929/2024</b>, sửa đổi <b>3446/2025</b>; lãi suất theo thông báo hiện hành.<br>
     Agribank Chi nhánh Bắc Giang II · Ứng dụng tra cứu nội bộ · Tác giả: Trần Minh Hải – 0938150987
   </div>
 </footer>
@@ -374,7 +374,8 @@ const CARDIMG = {"jcb_credit_gold": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAA
 /* ============================================================
    TRA CỨU DỊCH VỤ THẺ AGRIBANK — CN Bắc Giang II
    Nguồn: QĐ 2239 (31/7/2024), sửa đổi 2946; Biểu phí 2929/2024 &
-   sửa đổi 3446/2025; CV 9452 (Mastercard World)
+   sửa đổi 3446/2025; CV 9452 (Mastercard World);
+   QĐ 3069/QyĐ-NHNo-TTT (16/10/2026, hiệu lực 26/10/2026)
    ============================================================ */
 if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -402,41 +403,49 @@ function svg(n){return '<span class="icn"><svg viewBox="0 0 24 24">'+(IC[n]||IC.
 const COND_INDIV=[
   "Cá nhân từ đủ 18 tuổi có năng lực hành vi dân sự đầy đủ; hoặc từ đủ 15 đến dưới 18 tuổi không bị mất/hạn chế NLHVDS và có tài sản riêng bảo đảm nghĩa vụ.",
   "Xuất trình giấy tờ tùy thân hợp lệ (CCCD/Căn cước/hộ chiếu…) và hoàn thành đối chiếu sinh trắc học theo quy định.",
+  "Đăng ký phát hành thẻ vật lý trên kênh điện tử: người Việt Nam <b>từ đủ 18 tuổi</b>, có đăng ký dịch vụ <b>Agribank Plus</b> (QĐ 3069).",
+  "Người nước ngoài: xuất trình giấy tờ chứng minh thời hạn cư trú còn lại tại Việt Nam tối thiểu bằng thời hạn hiệu lực của thẻ; nếu ngắn hơn, cam kết cung cấp bổ sung tối thiểu 30 ngày trước ngày giấy tờ cư trú hết hiệu lực.",
   "Chấp hành quy định về phát hành, quản lý, sử dụng và thanh toán thẻ của Agribank."];
 const COND_CREDIT=[
   "Cá nhân từ đủ 18 tuổi, có năng lực pháp luật và năng lực hành vi dân sự đầy đủ.",
   "Được thẩm định năng lực tài chính, khả năng trả nợ; thuộc đối tượng được cấp tín dụng theo Luật Các tổ chức tín dụng.",
   "Hạn mức do Giám đốc Chi nhánh phát hành quyết định, không vượt hạn mức của từng hạng thẻ.",
+  "Người nước ngoài: xuất trình giấy tờ chứng minh thời hạn cư trú còn lại tại Việt Nam tối thiểu bằng thời hạn hiệu lực của thẻ; nếu ngắn hơn, cam kết cung cấp bổ sung tối thiểu 30 ngày trước ngày giấy tờ cư trú hết hiệu lực.",
   "Chỉ phát hành thẻ tại chi nhánh nơi khách hàng mở tài khoản thanh toán."];
 const COND_COMPANY=[
   "Pháp nhân được thành lập và hoạt động hợp pháp theo pháp luật Việt Nam.",
   "Pháp nhân đứng tên đề nghị phát hành và uỷ quyền cho cá nhân thuộc tổ chức sử dụng thẻ.",
   "Pháp nhân chịu trách nhiệm thanh toán toàn bộ chi tiêu, lãi và phí. Thẻ Công ty không có thẻ phụ."];
 const COND_VIRTUAL=[
-  "Cá nhân người Việt Nam đủ điều kiện phát hành, sử dụng thẻ của Agribank.",
-  "Có đăng ký dịch vụ ngân hàng số (Agribank Plus / eBanking) và CCCD gắn chip còn hiệu lực.",
-  "Phát hành 100% trực tuyến; tối đa 05 thẻ còn hiệu lực/tài khoản."];
-const COND_PREPAID=[
-  "Cá nhân từ đủ 18 tuổi có NLHVDS đầy đủ; hoặc từ đủ 15 đến dưới 18 tuổi có tài sản riêng.",
-  "Chấp hành quy định về phát hành, quản lý, sử dụng và thanh toán thẻ của Agribank."];
+  "Cá nhân người Việt Nam <b>từ đủ 18 tuổi</b> trở lên, đáp ứng đủ điều kiện phát hành, sử dụng thẻ ghi nợ Agribank (QĐ 3069).",
+  "Có đăng ký sử dụng dịch vụ <b>Agribank Plus</b>.",
+  "Hoàn thành đối chiếu khớp đúng giấy tờ tùy thân và thông tin sinh trắc học trước khi phát hành, sử dụng thẻ.",
+  "Phát hành trên kênh điện tử hoặc Agribank Digital; tối đa 05 thẻ còn hiệu lực/tài khoản."];
 
 /* ---------- TÍNH NĂNG ---------- */
 const FEAT_DEBIT_DOM=[
   "Rút tiền mặt & rút bằng QRCode tại ATM","Chuyển khoản, thanh toán hoá đơn",
   "Thanh toán hàng hoá, dịch vụ tại POS","Contactless — giao dịch dưới 1 triệu không cần nhập PIN",
-  "Liên kết ví điện tử; nạp/rút ví; Tap to pay","Nộp tiền, mở tiền gửi trực tuyến tại CDM"];
+  "Liên kết ví điện tử; nạp/rút ví; Tap to pay","Nộp tiền, mở tiền gửi trực tuyến tại CDM",
+  "Tuỳ chọn tham gia bảo hiểm Bảo an chủ thẻ (ABIC), phí trích tự động từ tài khoản"];
 const FEAT_DEBIT_INTL=[
   "Giao dịch trong & ngoài lãnh thổ Việt Nam","Thanh toán, mua sắm online quốc tế",
   "Rút / ứng tiền mặt tại ATM toàn cầu","Contactless & Tap to pay trên điện thoại",
+  "Ngay sau khi kích hoạt: giao dịch Internet, thanh toán ở nước ngoài và <b>giao dịch MOTO</b> (khách sạn trừ tiền đặt phòng qua Agoda, Booking… không cần quẹt thẻ; hạn mức bằng hạn mức giao dịch Internet)",
   "Chủ động bật/tắt thanh toán ở nước ngoài","Liên kết ví điện tử, thanh toán hoá đơn"];
 const FEAT_CREDIT=[
   "Miễn lãi giao dịch hàng hoá, dịch vụ khi trả đủ dư nợ đến hạn","Thanh toán & mua sắm online trong và ngoài nước",
   "Ứng tiền mặt tại ATM","Contactless, Tap to pay","Trả góp, vấn tin hạn mức, sao kê điện tử",
-  "Khoá / mở khoá thẻ chủ động trên kênh điện tử"];
+  "Khoá / mở khoá thẻ chủ động trên kênh điện tử",
+  "Ngay sau khi kích hoạt: giao dịch Internet, thanh toán ở nước ngoài, <b>giao dịch MOTO</b> (hạn mức bằng hạn mức giao dịch Internet)",
+  "Đặt trước dịch vụ (pre-authorization) khi thuê xe, khách sạn — hạn mức tạm giữ được hệ thống <b>tự động giải tỏa sau 30 ngày</b> kể từ ngày giao dịch (QĐ 3069; trước đây tới 60 ngày)",
+  "<i>Lưu ý: thẻ tín dụng không dùng để chuyển khoản vào tài khoản thanh toán, thẻ ghi nợ, thẻ trả trước; không nạp/rút tiền ví điện tử.</i>"];
 const PERK_GENERIC=[
   "Ưu đãi giảm giá, hoàn tiền theo chương trình của Agribank & Tổ chức thẻ trong từng thời kỳ.",
   "Ưu đãi thanh toán contactless tại hệ thống đối tác liên kết.",
   "Dùng nút “Thêm chương trình ưu đãi” bên dưới để lưu các ưu đãi cụ thể đang áp dụng."];
+const PERK_INTL_DEBIT=["Mặc nhiên được tham gia và <b>miễn phí bảo hiểm tai nạn chủ thẻ</b> (chủ thẻ ghi nợ quốc tế).",...PERK_GENERIC];
+const PERK_INTL_CREDIT=["Agribank <b>miễn phí dịch vụ bảo hiểm</b> cho chủ thẻ tín dụng quốc tế.",...PERK_GENERIC];
 const PERK_WORLD=[
   "Phòng chờ sân bay: 4 lượt/năm miễn phí — Mastercard Travel Pass (DragonPass), hơn 1.200 phòng chờ toàn cầu.",
   "Golf Đông Nam Á: giảm 50% green fee, 4 lượt/năm tại 42 câu lạc bộ cao cấp.",
@@ -446,35 +455,60 @@ const PERK_WORLD=[
   "Mua sắm & hoàn tiền: Shopee, Aeon, FamilyMart… ưu đãi thanh toán contactless.",
   "Bảo hiểm mua sắm online tới 4,5 triệu đồng · bảo vệ chống trộm danh tính.",
   "Priceless Specials: kho ưu đãi du lịch – ẩm thực – giải trí toàn cầu.",
-  "Hotline riêng 24/7 dành cho chủ thẻ: 1800 282 855."];
+  "Hotline riêng 24/7 dành cho chủ thẻ: 1800 282 855.",
+  "Agribank miễn phí dịch vụ bảo hiểm cho chủ thẻ tín dụng quốc tế."];
 
 /* ---------- HẠN MỨC ---------- */
-function limDomDebit(t){const r=t==='Vàng'?'50':'25';return[
+function limDomDebit(t){const r=t==='Vàng'?'100':'70';return[
   ['Rút / ứng tiền mặt tại ATM',r+' triệu/ngày'],['Chuyển khoản','300 triệu/ngày'],
   ['Thanh toán hàng hoá, dịch vụ','Không hạn chế'],['Giao dịch Internet','100 triệu/ngày'],
   ['Rút tiền tại nước ngoài (NAPAS)','≤ 30 triệu/ngày'],['Rút tiền mặt/lần (ATM Agribank)','5 triệu/giao dịch']];}
-function limIntlDebit(t){const r=t==='Vàng'?'50':'25',pay=t==='Vàng'?'150':'100';return[
+function limIntlDebit(t){const r=t==='Vàng'?'100':'70',pay=t==='Vàng'?'150':'100';return[
   ['Rút / ứng tiền mặt tại ATM',r+' triệu/ngày'],['Chuyển khoản (nội bộ Agribank)','300 triệu/ngày'],
   ['Thanh toán hàng hoá, dịch vụ',pay+' triệu/ngày'],['Giao dịch Internet','100 triệu/ngày'],
+  ['Giao dịch MOTO','Bằng hạn mức giao dịch Internet'],
   ['Rút tiền tại nước ngoài','≤ 30 triệu/ngày']];}
-const HMTD={'Chuẩn':'≤ 100 triệu','Vàng':'≤ 300 triệu','Bạch Kim':'≤ 2 tỷ','Kim Cương':'≤ 5 tỷ','Vàng · Công ty':'Theo đề nghị pháp nhân'};
+const HMTD={'Chuẩn':'≤ 200 triệu','Vàng':'≤ 500 triệu','Bạch Kim':'≤ 2 tỷ','Kim Cương':'≤ 5 tỷ','Vàng · Công ty':'Theo đề nghị pháp nhân · tổng ≤ 5 tỷ/pháp nhân'};
 const PAY_I={'Chuẩn':'100 triệu','Vàng':'150 triệu','Bạch Kim':'300 triệu','Kim Cương':'500 triệu','Vàng · Công ty':'Theo hạn mức cấp'};
-const CASH_I={'Chuẩn':'25 triệu','Vàng':'50 triệu','Bạch Kim':'100 triệu','Kim Cương':'200 triệu','Vàng · Công ty':'Theo hạn mức cấp'};
-function limIntlCredit(t){return[
+const CASH_I={'Chuẩn':'50 triệu','Vàng':'100 triệu','Bạch Kim':'100 triệu','Kim Cương':'100 triệu','Vàng · Công ty':'Theo hạn mức cấp'};
+function limIntlCredit(t){const r=[
   ['Hạn mức tín dụng tối đa',HMTD[t]||'—'],['Ứng tiền mặt','≤ 50% HMTD · tổng ≤ 100 triệu/tháng'],
   ['Thanh toán hàng hoá, dịch vụ/ngày',PAY_I[t]||'—'],['Rút / ứng tiền mặt ATM/ngày',CASH_I[t]||'—'],
-  ['Giao dịch Internet/ngày','100 triệu']];}
+  ['Giao dịch Internet/ngày','100 triệu'],['Giao dịch MOTO','Bằng hạn mức giao dịch Internet']];
+  if(t!=='Vàng · Công ty')r.push(['Căn cứ hạn mức tín dụng','QĐ 3069 (16/10/2026) · áp dụng từ 26/10/2026']);
+  return r;}
 const LIM_DOM_CREDIT=[
-  ['Trả lương qua TK / vay vốn / có TSBĐ','≤ 100 triệu'],
-  ['Số dư tiền gửi BQ 6 tháng ≥ 10tr (hạng A1–A12)','≤ 50 triệu'],
-  ['Cá nhân khu vực nông nghiệp, nông thôn','≤ 30 triệu'],
-  ['Sinh viên các trường ĐH, CĐ, trung cấp','≤ 10 triệu']];
+  ['Trả lương qua TK / vay vốn / có TSBĐ','≤ 200 triệu'],
+  ['Số dư tiền gửi BQ 6 tháng ≥ 10tr (hạng A1–A12)','≤ 100 triệu'],
+  ['Cá nhân khu vực nông nghiệp, nông thôn','≤ 50 triệu'],
+  ['Sinh viên Học viện, ĐH, CĐ, trung cấp','≤ 20 triệu'],
+  ['KH thuộc thỏa thuận hợp tác giữa Agribank và tổ chức','Theo thông báo của TGĐ (không vượt HMTD cá nhân)'],
+  ['Ứng tiền mặt','≤ 100% HMTD · tổng ≤ 100 triệu/tháng'],
+  ['Căn cứ hạn mức tín dụng','QĐ 3069 (16/10/2026) · áp dụng từ 26/10/2026']];
 function prinIntl(day){return[
   ['Ngày sao kê',day],['Đến hạn thanh toán','Sau 15 ngày kể từ ngày sao kê'],
-  ['Tỷ lệ thanh toán tối thiểu','5% dư nợ cuối kỳ (không thấp hơn 200.000đ)'],['Miễn lãi','Tối đa ~45 ngày khi trả đủ dư nợ đến hạn']];}
+  ['Tỷ lệ thanh toán tối thiểu','5% dư nợ cuối kỳ (không thấp hơn 200.000đ)'],['Miễn lãi','Tối đa ~45 ngày khi trả đủ dư nợ đến hạn'],
+  ['Khiếu nại giao dịch','Trong 60 ngày kể từ ngày giao dịch']];}
 const PRIN_DOM=[
   ['Ngày sao kê','Ngày 10 hàng tháng'],['Đến hạn thanh toán','Sau 25 ngày kể từ sao kê'],
-  ['Tỷ lệ thanh toán tối thiểu','2% dư nợ cuối kỳ (không thấp hơn 200.000đ)'],['Miễn lãi','Tối đa ~55 ngày khi trả đủ dư nợ đến hạn']];
+  ['Tỷ lệ thanh toán tối thiểu','2% dư nợ cuối kỳ (không thấp hơn 200.000đ)'],['Miễn lãi','Tối đa ~55 ngày khi trả đủ dư nợ đến hạn'],
+  ['Khiếu nại giao dịch','Trong 80 ngày kể từ ngày giao dịch']];
+/* Gia hạn thẻ tín dụng khi hết hạn — QĐ 3069 (khoản 10 Điều 1, hiệu lực 10/11/2026) & Điều kiện điều khoản mới */
+function renewList(t){
+  if(t==='Vàng · Công ty')return[
+    'Công ty đề nghị gia hạn trong vòng 60 ngày trước ngày thẻ hết hạn; việc đồng ý gia hạn phải được công ty xác nhận bằng văn bản (Mẫu 26/THE).',
+    'Chi nhánh chủ động rà soát, lập và thẩm định hồ sơ gia hạn trong 40 ngày trước ngày hết hạn.',
+    'Điều kiện: đủ điều kiện phát hành thẻ tín dụng; kỳ sao kê gần nhất không phát sinh phí chậm trả và lãi quá hạn.',
+    'Thẻ gia hạn giữ nguyên hạng; thời hạn bằng thẻ phát hành mới; hạn mức tín dụng có thể điều chỉnh theo kết quả thẩm định; hạn mức giao dịch theo mức mặc định của hạng thẻ.',
+    '<i>Áp dụng từ 10/11/2026 theo QĐ 3069. Không gia hạn: chấm dứt sử dụng thẻ khi hết hạn, thanh toán toàn bộ dư nợ, lãi, phí.</i>'];
+  return[
+    'Thẻ hết hạn vào ngày cuối cùng của tháng ghi trên thẻ.',
+    'Chủ thẻ được đề nghị gia hạn trong vòng 60 ngày trước ngày hết hạn; chi nhánh chủ động rà soát, lập và thẩm định hồ sơ gia hạn trong 40 ngày trước ngày hết hạn.',
+    'Agribank báo cho chủ thẻ đủ điều kiện chậm nhất 40 ngày trước ngày hết hạn; nếu chủ thẻ không từ chối trước ngày hết hạn ít nhất 30 ngày thì coi như đồng ý <b>tự động gia hạn</b>.',
+    'Điều kiện: đủ điều kiện phát hành thẻ tín dụng; kỳ sao kê gần nhất không phát sinh phí chậm trả và lãi quá hạn.',
+    'Thẻ gia hạn giữ nguyên hạng; thời hạn bằng thẻ phát hành mới; thẻ phụ gia hạn theo yêu cầu chủ thẻ chính; hạn mức tín dụng có thể điều chỉnh theo kết quả thẩm định.',
+    '<i>Áp dụng từ 10/11/2026 theo QĐ 3069. Không đồng ý hoặc không đủ điều kiện gia hạn: chấm dứt sử dụng thẻ khi hết hạn, thanh toán toàn bộ dư nợ, lãi, phí.</i>'];
+}
 
 /* ============================================================
    BIỂU PHÍ — SỐ TIỀN THẬT (QĐ 2929/2024, sửa đổi 3446/2025)
@@ -484,7 +518,7 @@ const NOTE_NOVAT='Phí phát hành, thường niên, thay đổi hạn mức tí
 
 function feeDomDebit(t){const ph=t==='Vàng'?'100.000đ':'50.000đ',phl=t==='Vàng'?'50.000đ':'25.000đ',tn=t==='Vàng'?'50.000đ':'20.000đ';
   return{issue:[['Phí phát hành mới',ph],['Phí phát hành lại',phl],['Phí thường niên',tn+' /năm']],
-  txn:['Rút / ứng tiền mặt tại ATM Agribank: 1.000đ/GD (nếu in hoá đơn +500đ)',
+  txn:['Rút / ứng tiền mặt tại ATM Agribank: 1.000đ/GD (nếu in biên lai +500đ)',
     'Rút tiền ATM ngoài hệ thống: trong nước 3.000đ · ngoài nước 40.000đ/GD',
     'Chuyển khoản (cùng hệ thống & liên ngân hàng): Miễn phí',
     'Thanh toán hàng hoá, dịch vụ tại POS: Miễn phí',
@@ -496,7 +530,7 @@ function feeDomDebit(t){const ph=t==='Vàng'?'100.000đ':'50.000đ',phl=t==='Và
 function feeIntlDebit(t){const ph=t==='Vàng'?'150.000đ':'100.000đ',phl=t==='Vàng'?'75.000đ':'50.000đ',
   tn=t==='Vàng'?'150.000đ':'100.000đ',tnp=t==='Vàng'?'75.000đ':'50.000đ';
   return{issue:[['Phí phát hành mới',ph],['Phí phát hành lại',phl],['Phí thường niên (thẻ chính)',tn+' /năm'],['Phí thường niên (thẻ phụ)',tnp+' /năm']],
-  txn:['Rút / ứng tiền mặt tại ATM Agribank: 1.000đ/GD (nếu in hoá đơn +500đ)',
+  txn:['Rút / ứng tiền mặt tại ATM Agribank: 1.000đ/GD (nếu in biên lai +500đ)',
     'Rút tiền ATM ngoài hệ thống: trong nước 10.000đ · ngoài nước 4% số tiền (tối thiểu 50.000đ)',
     'Rút / ứng tiền mặt tại POS ngoài hệ thống: trong nước 4% · ngoài nước 6% (tối thiểu 50.000đ)',
     'Thanh toán hàng hoá, dịch vụ tại POS: Miễn phí',
@@ -519,7 +553,7 @@ function feeIntlCredit(t){const term=(t==='Bạch Kim'||t==='Kim Cương')?'300.
     'Xác nhận 80.000đ · Tra soát 50.000đ · Cấp lại PIN 20.000đ/lần'],novat:true};}
 
 function feeLocDebit(t){return{issue:[['Phí phát hành mới','Miễn phí'],['Phí phát hành lại','50.000đ (miễn phí nếu do thẻ hết hạn)'],['Phí thường niên','150.000đ /năm — miễn phí năm đầu']],
-  txn:['Rút / ứng tiền mặt (ghi nợ nội địa) tại ATM Agribank: 1.000đ/GD (nếu in hoá đơn +500đ)',
+  txn:['Rút / ứng tiền mặt (ghi nợ nội địa) tại ATM Agribank: 1.000đ/GD (nếu in biên lai +500đ)',
     'Rút tiền ATM ngoài hệ thống: trong nước 3.000đ · ngoài nước 40.000đ/GD',
     'Chuyển khoản (cùng hệ thống & liên ngân hàng): Miễn phí',
     'Thanh toán hàng hoá, dịch vụ tại POS: Miễn phí',
@@ -538,15 +572,13 @@ function feeVirtual(scope){return{issue:[['Phí phát hành','10.000đ /thẻ'],
     ['Giao dịch, phí áp dụng như thẻ ghi nợ nội địa hạng Vàng','Thanh toán, chuyển khoản, contactless — Miễn phí trong hệ thống','Rút tiền ATM ngoài hệ thống: trong nước 3.000đ · ngoài nước 40.000đ/GD']:
     ['Giao dịch, phí áp dụng như thẻ ghi nợ quốc tế hạng Vàng','Thanh toán online quốc tế; phí chuyển đổi ngoại tệ 2% (tối thiểu 10.000đ)','Rút tiền ATM ngoài hệ thống: trong nước 10.000đ · ngoài nước 4% (tối thiểu 50.000đ)'])};}
 
-function feePrepaid(){return{issue:[['Phí phát hành','10.000đ /thẻ'],['Phí thường niên','Không áp dụng']],
-  txn:['Chỉ thanh toán hàng hoá, dịch vụ tại Việt Nam','Không rút tiền mặt · không nạp thêm · không phát hành lại','Phí theo Biểu phí dịch vụ Agribank hiện hành']};}
 
 /* ---------- hạn mức/tính năng phụ ---------- */
 const LIM_VIRTUAL=[['Hình thức','Phi vật lý — dùng trên ứng dụng'],['Hạn mức tự cài','≤ 100 triệu/ngày'],['Số thẻ tối đa','05 thẻ còn hiệu lực/tài khoản'],['Thời hạn hiệu lực','01 năm']];
-const LIM_PREPAID=[['Mệnh giá thẻ','1 · 2 · 5 triệu đồng'],['Hạn mức/ngày','Tối đa bằng mệnh giá'],['Phạm vi sử dụng','Thanh toán HHDV tại Việt Nam'],['Thời hạn hiệu lực','06 tháng hoặc 01 năm']];
 const FEAT_VIRTUAL=['Không có phôi vật lý — dùng ngay trên ứng dụng ngân hàng số','Phát hành 100% trực tuyến qua kênh điện tử','Thanh toán online, contactless, QR','Hạn mức do chủ thẻ chủ động cài đặt'];
-const FEAT_PREPAID=['Nạp sẵn tiền, thanh toán như tiền mặt','Không định danh chủ thẻ','Không rút tiền mặt · không nạp thêm','Không giao dịch Internet · không phát hành lại'];
-const FEAT_CREDIT_DOM=['Miễn lãi khi thanh toán đủ dư nợ đến hạn','Thanh toán contactless, QR nội địa qua NAPAS','Ứng tiền mặt tại ATM trong nước','Trả góp, vấn tin hạn mức, sao kê điện tử'];
+const FEAT_CREDIT_DOM=['Miễn lãi khi thanh toán đủ dư nợ đến hạn','Thanh toán contactless, QR nội địa qua NAPAS','Ứng tiền mặt tại ATM trong nước','Trả góp, vấn tin hạn mức, sao kê điện tử',
+  'Đặt trước dịch vụ (pre-authorization): hạn mức tạm giữ được hệ thống <b>tự động giải tỏa sau 30 ngày</b> kể từ ngày giao dịch (QĐ 3069)',
+  "<i>Lưu ý: thẻ tín dụng không dùng để chuyển khoản vào tài khoản thanh toán, thẻ ghi nợ, thẻ trả trước; không nạp/rút tiền ví điện tử.</i>"];
 const WORLD_HL='<b>Sản phẩm cao cấp nhất (VIP).</b> Mã BIN 54225115 · Hotline riêng 1800 282 855 · Hạn mức tín dụng tối đa 5 tỷ đồng. Theo chương trình Mastercard World: <b>miễn phí phát hành và phí thường niên năm đầu</b> (các năm sau theo Biểu phí: phát hành 2.000.000đ, thường niên 5.000.000đ/năm).';
 
 /* ============================================================
@@ -567,22 +599,19 @@ const DB=[
      highlight:'<b>Tín dụng nội địa Lộc Việt.</b> Lãi suất hợp lý, ưu tiên khách hàng khu vực nông nghiệp – nông thôn; tích hợp cùng thẻ ghi nợ trên một chip.' },
    { id:'dcard', name:'Dcard (phi vật lý)', type:'Thẻ ghi nợ phi vật lý', badge:'virtual', color:'#1B4D3E', brand:'napas',
      tiers:[{n:'Vàng',gold:true}], cond:COND_VIRTUAL, validity:'01 năm', limits:()=>LIM_VIRTUAL, fee:()=>feeVirtual('dom'), features:FEAT_VIRTUAL, perks:PERK_GENERIC },
-   { id:'prepaid', name:'Thẻ trả trước vô danh', type:'Thẻ trả trước', badge:'prepaid', color:'#3a2a2e', brand:'napas',
-     tiers:[{n:'Vô danh'}], cond:COND_PREPAID, validity:'06 tháng / 01 năm', limits:()=>LIM_PREPAID, fee:feePrepaid, features:FEAT_PREPAID,
-     perks:['Không gắn thông tin định danh — dùng thanh toán như tiền mặt.'] },
  ]},
  { id:'visa', name:'Visa', logo:'visa', cards:[
    { id:'gn-visa', name:'Thẻ ghi nợ quốc tế Visa', type:'Thẻ ghi nợ quốc tế', badge:'debit', color:'#1A1F71', brand:'visa',
      tiers:[{n:'Chuẩn'},{n:'Vàng',gold:true}], img:'visa_debit_gold', tierImg:{'Chuẩn':'visa_debit_classic','Vàng':'visa_debit_gold'},
-     cond:COND_INDIV, validity:'05 năm', limits:limIntlDebit, fee:feeIntlDebit, features:FEAT_DEBIT_INTL, perks:PERK_GENERIC },
+     cond:COND_INDIV, validity:'05 năm', limits:limIntlDebit, fee:feeIntlDebit, features:FEAT_DEBIT_INTL, perks:PERK_INTL_DEBIT },
    { id:'td-visa', name:'Thẻ tín dụng Visa', type:'Thẻ tín dụng quốc tế', badge:'credit', color:'#141a5e', brand:'visa',
      tiers:[{n:'Chuẩn'},{n:'Vàng',gold:true}], img:'visa_credit_classic', tierImg:{'Chuẩn':'visa_credit_classic','Vàng':'visa_credit_gold'},
-     cond:COND_CREDIT, validity:'05 năm', limits:limIntlCredit, fee:feeIntlCredit, principles:prinIntl('Ngày 10 hàng tháng'), features:FEAT_CREDIT, perks:PERK_GENERIC },
+     cond:COND_CREDIT, validity:'05 năm', limits:limIntlCredit, fee:feeIntlCredit, principles:prinIntl('Ngày 10 hàng tháng'), features:FEAT_CREDIT, perks:PERK_INTL_CREDIT },
  ]},
  { id:'mc', name:'Mastercard', logo:'mc', cards:[
    { id:'gn-mc', name:'Thẻ ghi nợ quốc tế Mastercard', type:'Thẻ ghi nợ quốc tế', badge:'debit', color:'#233240', brand:'mc',
      tiers:[{n:'Chuẩn'},{n:'Vàng',gold:true}], img:'mc_debit_classic', tierImg:{'Chuẩn':'mc_debit_classic'},
-     cond:COND_INDIV, validity:'05 năm', limits:limIntlDebit, fee:feeIntlDebit, features:FEAT_DEBIT_INTL, perks:PERK_GENERIC },
+     cond:COND_INDIV, validity:'05 năm', limits:limIntlDebit, fee:feeIntlDebit, features:FEAT_DEBIT_INTL, perks:PERK_INTL_DEBIT },
    { id:'vcard', name:'Vcard (phi vật lý)', type:'Thẻ ghi nợ QT phi vật lý', badge:'virtual', color:'#2b3a48', brand:'mc',
      tiers:[{n:'Vàng',gold:true}], cond:COND_VIRTUAL, validity:'01 năm', limits:()=>LIM_VIRTUAL, fee:()=>feeVirtual('intl'), features:FEAT_VIRTUAL, perks:PERK_GENERIC },
    { id:'td-mc', name:'Thẻ tín dụng Mastercard', type:'Thẻ tín dụng quốc tế', badge:'credit', color:'#12181c', brand:'mc',
@@ -590,18 +619,18 @@ const DB=[
      img:'mc_world', tierImg:{'Vàng':'mc_credit_gold','Bạch Kim':'mc_platinum','Vàng · Công ty':'mc_credit_gold','Kim Cương':'mc_world'},
      cond:t=>t==='Vàng · Công ty'?COND_COMPANY:COND_CREDIT, validity:'05 năm', limits:limIntlCredit, fee:feeIntlCredit,
      principles:prinIntl('Ngày 20 hàng tháng'), features:FEAT_CREDIT,
-     perks:t=>t==='Kim Cương'?PERK_WORLD:PERK_GENERIC, perkTitle:t=>t==='Kim Cương'?'Đặc quyền Mastercard World (Kim Cương)':'Đặc quyền & ưu đãi có sẵn',
+     perks:t=>t==='Kim Cương'?PERK_WORLD:PERK_INTL_CREDIT, perkTitle:t=>t==='Kim Cương'?'Đặc quyền Mastercard World (Kim Cương)':'Đặc quyền & ưu đãi có sẵn',
      highlight:t=>t==='Kim Cương'?WORLD_HL:null },
  ]},
  { id:'jcb', name:'JCB', logo:'jcb', cards:[
    { id:'gn-jcb', name:'Thẻ ghi nợ quốc tế JCB', type:'Thẻ ghi nợ quốc tế', badge:'debit', color:'#0B4EA2', brand:'jcb',
      tiers:[{n:'Chuẩn'},{n:'Vàng',gold:true}], img:'jcb_debit_gold', tierImg:{'Vàng':'jcb_debit_gold'},
-     cond:COND_INDIV, validity:'05 năm', limits:limIntlDebit, fee:feeIntlDebit, features:FEAT_DEBIT_INTL, perks:PERK_GENERIC },
+     cond:COND_INDIV, validity:'05 năm', limits:limIntlDebit, fee:feeIntlDebit, features:FEAT_DEBIT_INTL, perks:PERK_INTL_DEBIT },
    { id:'jcard', name:'JCard (phi vật lý)', type:'Thẻ ghi nợ QT phi vật lý', badge:'virtual', color:'#0d3d7a', brand:'jcb',
      tiers:[{n:'Vàng',gold:true}], cond:COND_VIRTUAL, validity:'01 năm', limits:()=>LIM_VIRTUAL, fee:()=>feeVirtual('intl'), features:FEAT_VIRTUAL, perks:PERK_GENERIC },
    { id:'td-jcb', name:'Thẻ tín dụng JCB', type:'Thẻ tín dụng quốc tế', badge:'credit', color:'#0a2e5c', brand:'jcb',
      tiers:[{n:'Vàng',gold:true},{n:'Bạch Kim'}], img:'jcb_ultimate', tierImg:{'Vàng':'jcb_credit_gold','Bạch Kim':'jcb_ultimate'},
-     cond:COND_CREDIT, validity:'05 năm', limits:limIntlCredit, fee:feeIntlCredit, principles:prinIntl('Ngày 20 hàng tháng'), features:FEAT_CREDIT, perks:PERK_GENERIC },
+     cond:COND_CREDIT, validity:'05 năm', limits:limIntlCredit, fee:feeIntlCredit, principles:prinIntl('Ngày 20 hàng tháng'), features:FEAT_CREDIT, perks:PERK_INTL_CREDIT },
  ]},
 ];
 const BADGE_TXT={debit:'Ghi nợ',credit:'Tín dụng',virtual:'Phi vật lý',prepaid:'Trả trước'};
@@ -704,6 +733,7 @@ function renderDetail(brand,c){
   panels+=pKV('Phí phát hành & thường niên',fee.issue,'cash');
   panels+=pList('Phí giao dịch & phí khác',txn,'coins');
   if(prin) panels+=pKV('Nguyên tắc tín dụng (sao kê – miễn lãi)',prin,'clock','accent');
+  if(c.badge==='credit') panels+=pList('Gia hạn thẻ khi hết hạn',renewList(tier),'clock');
   panels+=pList('Tính năng & tiện ích',feats,'star');
   if(hl) panels+=`<div class="panel hl"><div class="p-h">${svg('gift')}<h4>Điểm nổi bật</h4></div><p class="hl-t">${hl}</p></div>`;
   panels+=pList(perkTitle,perks,'gift', perkTitle.includes('World')?'gold':'');
@@ -801,11 +831,15 @@ function feeCell(card,prefix){
   if(nums.length&&nums.every(n=>n!==null)){const mn=Math.min(...nums),mx=Math.max(...nums);return mn===mx?fmtV(mn):fmtV(mn)+' – '+fmtV(mx);}
   return (vals.find(v=>v)||'—');
 }
+function cmpHMTD(c){
+  if(c.badge!=='credit')return '<span class="muted">Không áp dụng</span>';
+  if(c.id==='td-lv')return '≤ 200 triệu<br><span class="muted">tuỳ đối tượng khách hàng</span>';
+  return c.tiers.filter(t=>t.n!=='Vàng · Công ty'&&HMTD[t.n]).map(t=>t.n+': '+HMTD[t.n]).join('<br>');
+}
 function cmpHighlight(c){
   if(c.id==='td-mc')return 'Có hạng <b>Kim Cương = Mastercard World</b> (VIP)';
   if(c.badge==='credit')return 'Miễn lãi tới '+(GRACE[c.id]?GRACE[c.id].max:45)+' ngày, trả góp';
   if(c.badge==='virtual')return 'Phi vật lý — phát hành 100% online';
-  if(c.badge==='prepaid')return 'Nạp sẵn tiền, không định danh';
   return c.brand==='napas'?'Ghi nợ nội địa, contactless':'Ghi nợ quốc tế, dùng toàn cầu';
 }
 function renderCompare(){
@@ -822,6 +856,7 @@ function renderCompare(){
       ['Phạm vi', c=>c.brand==='napas'?'Trong nước':'Quốc tế'],
       ['Các hạng', c=>c.tiers.map(t=>t.n).join(', ')],
       ['Thời hạn hiệu lực', c=>c.validity],
+      ['Hạn mức tín dụng', c=>cmpHMTD(c)],
       ['Phí phát hành', c=>feeCell(c,'Phí phát hành')],
       ['Phí thường niên', c=>feeCell(c,'Phí thường niên')],
       ['Miễn lãi tối đa', c=>GRACE[c.id]?GRACE[c.id].max+' ngày':'—'],
